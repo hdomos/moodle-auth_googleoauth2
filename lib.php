@@ -72,7 +72,7 @@ function auth_googleoauth2_display_buttons() {
     echo '<div class="singinprovider" style="' . $providerdisplaystyle .'">
             <a class="zocial googleplus" href="https://accounts.google.com/o/oauth2/auth?client_id='.
               get_config('auth/googleoauth2', 'googleclientid') .'&redirect_uri='.$CFG->wwwroot .'/auth/googleoauth2/google_redirect.php&state='.auth_googleoauth2_get_state_token().'&scope=https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email&response_type=code">'.
-                get_string('button_google', 'auth_google')
+                get_string('button_google', 'auth_googleoauth2')
             .'</a>
         </div>';
 
@@ -80,7 +80,7 @@ function auth_googleoauth2_display_buttons() {
      $providerdisplaystyle = $displayprovider?'display:inline-block;padding:10px;':'display:none;';
      echo '<div class="singinprovider" style="'. $providerdisplaystyle .'">
             <a class="zocial facebook" href="https://www.facebook.com/dialog/oauth?client_id='. get_config('auth/googleoauth2', 'facebookclientid') .'&redirect_uri='. $CFG->wwwroot .'/auth/googleoauth2/facebook_redirect.php&state='.auth_googleoauth2_get_state_token().'&scope=email&response_type=code">'.
-                get_string('button_facebook', 'auth_google')
+                get_string('button_facebook', 'auth_googleoauth2')
             .'</a>
         </div>';
 
