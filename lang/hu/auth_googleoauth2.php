@@ -74,5 +74,5 @@ $string['signinwithanaccount'] = 'Log in with:';
 $string['noaccountyet'] = 'You do not have permission to use the site yet. Please contact your administrator and ask them to activate your account.';
 
 /* Login button translations */
-$string['button_google'] = 'Sign-in with Google';
-$string['button_facebook'] = 'Sign-in with Facebook';
+$string['button_google'] = 'Bejelentkezés Google fiókkal';
+$string['button_facebook'] = 'Bejelentkezés Facebook fiókkal';
