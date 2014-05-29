@@ -66,13 +66,16 @@ $string['auth_messengerclientid_key'] = 'Messenger Client ID';
 $string['auth_messengerclientsecret'] = 'See above.';
 $string['auth_messengerclientsecret_key'] = 'Messenger Client secret';
 
-$string['auth_googlesettings'] = 'Settings';
-$string['couldnotgetgoogleaccesstoken'] = 'The authentication provider sent us a communication error. Please try to sign-in again.';
-$string['emailaddressmustbeverified'] = 'Your email address is not verified by the authentication method you selected. You likely have forgotten to click on a "verify email address" link that Google or Facebook should have sent you during your subscribtion to their service.';
-$string['moreproviderlink'] = 'Sign-in with another service.';
-$string['signinwithanaccount'] = 'Log in with:';
-$string['noaccountyet'] = 'You do not have permission to use the site yet. Please contact your administrator and ask them to activate your account.';
+$string['auth_googlesettings'] = 'Beállítások';
+$string['couldnotgetgoogleaccesstoken'] = 'A szolgáltató kommunikációs hibát jelzett. Kérjük próbálj meg belépni mégegyszer.';
+$string['emailaddressmustbeverified'] = 'Az email címed nincs megerősítve az általad választott hitelesítési móddal. Valószínüleg elfelejtettél kattintani az "email cím megerősítése" linkre amit a Google vagy Facebook küldött amikor regisztráltál náluk.';
+$string['moreproviderlink'] = 'Belépés más szolgáltatóval.';
+$string['signinwithanaccount'] = 'Belépés:';
+$string['noaccountyet'] = 'Még nincs engedélyed az oldal használatához. Lépj kapcsolatba az adminisztrátorokkal és kérd meg hogy aktiválják a felhasználódat.';
 
 /* Login button translations */
-$string['button_google'] = 'Bejelentkezés Google fiókkal';
-$string['button_facebook'] = 'Bejelentkezés Facebook fiókkal';
+$string['button_google'] = 'Belépés Google fiókkal';
+$string['button_facebook'] = 'Belépés Facebookkal';
+$string['button_github'] = 'Belépés Github fiókkal';
+$string['button_linkedin'] = 'Belépés Linkedinnel';
+$string['button_live'] = 'Belépés Windows Live fiókkal';

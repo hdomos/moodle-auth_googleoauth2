@@ -76,3 +76,6 @@ $string['noaccountyet'] = 'You do not have permission to use the site yet. Pleas
 /* Login button translations */
 $string['button_google'] = 'Sign-in with Google';
 $string['button_facebook'] = 'Sign-in with Facebook';
+$string['button_github'] = 'Sign-in with Github';
+$string['button_linkedin'] = 'Sign-in with Linkedin';
+$string['button_live'] = 'Sign-in with Windows Live';
