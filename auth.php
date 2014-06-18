@@ -147,16 +147,12 @@ class auth_plugin_googleoauth2 extends auth_plugin_base {
 
             //request by curl an access token and refresh token
             require_once($CFG->libdir . '/filelib.php');
+            $curl = new curl();
             if ($authprovider == 'messenger') { //Windows Live returns an "Object moved" error with curl->post() encoding
-                $curl = new curl();
                 $postreturnvalues = $curl->get('https://oauth.live.com/token?client_id=' . urlencode($params['client_id']) . '&redirect_uri=' . urlencode($params['redirect_uri'] ). '&client_secret=' . urlencode($params['client_secret']) . '&code=' .urlencode( $params['code']) . '&grant_type=authorization_code');
-
-           } else if ($authprovider == 'linkedin') {
-                $curl = new curl();
+            } else if ($authprovider == 'linkedin') {
                 $postreturnvalues = $curl->get($requestaccesstokenurl . '?client_id=' . urlencode($params['client_id']) . '&redirect_uri=' . urlencode($params['redirect_uri'] ). '&client_secret=' . urlencode($params['client_secret']) . '&code=' .urlencode( $params['code']) . '&grant_type=authorization_code');
-
-           } else {
-                $curl = new curl();
+            } else {
                 $postreturnvalues = $curl->post($requestaccesstokenurl, $params);
             }
 
@@ -190,10 +186,10 @@ class auth_plugin_googleoauth2 extends auth_plugin_base {
                         $params = array();
                         $params['access_token'] = $accesstoken;
                         $params['alt'] = 'json';
-                        $postreturnvalues = $curl->get('https://www.googleapis.com/userinfo/email', $params);
+                        $postreturnvalues = $curl->get('https://www.googleapis.com/oauth2/v3/userinfo', $params);
                         $postreturnvalues = json_decode($postreturnvalues);
-                        $useremail = $postreturnvalues->data->email;
-                        $verified = $postreturnvalues->data->isVerified;
+                        $useremail = $postreturnvalues->email;
+                        $verified = $postreturnvalues->email_verified;
                         break;
 
                     case 'facebook':
@@ -221,8 +217,16 @@ class auth_plugin_googleoauth2 extends auth_plugin_base {
                         $postreturnvalues = $curl->get('https://api.github.com/user', $params);
                         $githubuser = json_decode($postreturnvalues);
                         $useremails = json_decode($curl->get('https://api.github.com/user/emails', $params));
-                        $useremail = $useremails[0];
-                        $verified = 1; // The field will be available in the final version of the API v3.
+                        $useremail = '';
+                        $verified = 0;
+                        // get first valid email
+                        foreach ($useremails as $email) {
+                            if ($email->verified) {
+                                $useremail = $email->email;
+                                $verified = (int) $email->verified;
+                                break;
+                            }
+                        }
                         break;
 
                     case 'linkedin':
@@ -402,6 +406,19 @@ class auth_plugin_googleoauth2 extends auth_plugin_base {
             } else {
                 throw new moodle_exception('couldnotgetgoogleaccesstoken', 'auth_googleoauth2');
             }
+        } else {
+            // If you are having issue with the display buttons option, add the button code directly in the theme login page.
+            if (get_config('auth/googleoauth2', 'oauth2displaybuttons')
+                // Check manual parameter that indicate that we are trying to log a manual user.
+                // We can add more param check for others provider but at the end,
+                // the best way may be to not use the oauth2displaybuttons option and
+                // add the button code directly in the theme login page.
+                and empty($_POST['username'])
+                and empty($_POST['password'])) {
+                // Display the button on the login page.
+                require_once($CFG->dirroot . '/auth/googleoauth2/lib.php');
+                auth_googleoauth2_display_buttons();
+            }
         }
     }
 
@@ -456,6 +473,9 @@ class auth_plugin_googleoauth2 extends auth_plugin_base {
         }
         if (!isset($config->googleuserprefix)) {
             $config->googleuserprefix = 'social_user_';
+        }
+        if (!isset($config->oauth2displaybuttons)) {
+            $config->oauth2displaybuttons = 1;
         }
 
         echo '<table cellspacing="0" cellpadding="5" border="0">
@@ -766,6 +786,31 @@ class auth_plugin_googleoauth2 extends auth_plugin_base {
         echo '</td></tr>';
 
 
+        // Display buttons
+
+        echo '<tr>
+                <td align="right"><label for="oauth2displaybuttons">';
+
+        print_string('oauth2displaybuttons', 'auth_googleoauth2');
+
+        echo '</label></td><td>';
+
+        $checked = empty($config->oauth2displaybuttons)?'':'checked';
+        echo html_writer::checkbox('oauth2displaybuttons', 1, $checked, '',
+            array('type' => 'checkbox', 'id' => 'oauth2displaybuttons', 'class' => 'oauth2displaybuttons'));
+
+        if (isset($err["oauth2displaybuttons"])) {
+            echo $OUTPUT->error_text($err["oauth2displaybuttons"]);
+        }
+
+        echo '</td><td>';
+
+        $code = '<code>&lt;?php require_once($CFG-&gt;dirroot . \'/auth/googleoauth2/lib.php\'); auth_googleoauth2_display_buttons(); ?&gt;</code>';
+        print_string('oauth2displaybuttonshelp', 'auth_googleoauth2', $code) ;
+
+        echo '</td></tr>';
+
+
         /// Block field options
         // Hidden email options - email must be set to: locked
         echo html_writer::empty_tag('input', array('type' => 'hidden', 'value' => 'locked',
@@ -825,6 +870,9 @@ class auth_plugin_googleoauth2 extends auth_plugin_base {
         if (!isset ($config->googleuserprefix)) {
             $config->googleuserprefix = 'social_user_';
         }
+        if (!isset ($config->oauth2displaybuttons)) {
+            $config->oauth2displaybuttons = 0;
+        }
 
         // save settings
         set_config('googleclientid', $config->googleclientid, 'auth/googleoauth2');
@@ -839,6 +887,7 @@ class auth_plugin_googleoauth2 extends auth_plugin_base {
         set_config('linkedinclientsecret', $config->linkedinclientsecret, 'auth/googleoauth2');
         set_config('googleipinfodbkey', $config->googleipinfodbkey, 'auth/googleoauth2');
         set_config('googleuserprefix', $config->googleuserprefix, 'auth/googleoauth2');
+        set_config('oauth2displaybuttons', $config->oauth2displaybuttons, 'auth/googleoauth2');
 
         return true;
     }
