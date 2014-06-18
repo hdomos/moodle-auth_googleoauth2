@@ -78,4 +78,4 @@ $string['button_google'] = 'Belépés Google fiókkal';
 $string['button_facebook'] = 'Belépés Facebookkal';
 $string['button_github'] = 'Belépés Github fiókkal';
 $string['button_linkedin'] = 'Belépés Linkedinnel';
-$string['button_live'] = 'Belépés Windows Live fiókkal';
+$string['button_windows'] = 'Belépés Windows Live fiókkal';

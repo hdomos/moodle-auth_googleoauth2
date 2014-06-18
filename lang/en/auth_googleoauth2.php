@@ -81,4 +81,4 @@ $string['button_google'] = 'Sign-in with Google';
 $string['button_facebook'] = 'Sign-in with Facebook';
 $string['button_github'] = 'Sign-in with Github';
 $string['button_linkedin'] = 'Sign-in with Linkedin';
-$string['button_live'] = 'Sign-in with Windows Live';
+$string['button_windows'] = 'Sign-in with Windows Live';
